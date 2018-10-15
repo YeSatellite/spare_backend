@@ -3,16 +3,6 @@ from django.db import models
 
 from apps.core.models import TimeStampedMixin
 
-OK = 'ok'
-FEW = 'few'
-OVER = 'over'
-
-PRODUCT_STATUS_CHOICES = (
-    ('k', OK),
-    ('f', FEW),
-    ('o', OVER),
-)
-
 
 # =============================================================
 
@@ -43,8 +33,9 @@ class ProductType(TimeStampedMixin):
 
 class Product(TimeStampedMixin):
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='products/', null=True)
     price = models.PositiveIntegerField()
-    status = models.CharField(max_length=1, choices=PRODUCT_STATUS_CHOICES)
+    status = models.PositiveIntegerField(default=2)
 
     type = models.ForeignKey(ProductType, models.CASCADE)
     place = models.ForeignKey(Place, models.CASCADE, null=True)

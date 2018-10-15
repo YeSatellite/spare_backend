@@ -29,8 +29,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(source='get_status_display')
-
     type = ProductTypeSerializer(read_only=True)
     type_id = serializers.IntegerField(write_only=True)
 
@@ -39,4 +37,4 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'price', 'status', 'type', 'type_id', 'place', 'place_id')
+        fields = ('id', 'name', 'image', 'price', 'status', 'type', 'type_id', 'place', 'place_id')

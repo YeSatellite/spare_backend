@@ -1,7 +1,8 @@
 # coding=utf-8
 from rest_framework.viewsets import ModelViewSet
 
-from apps.depot.models import Device, ProductType, Product
+from apps.depot import filters
+from apps.depot.models import Device, ProductType, Product, Place
 from apps.depot.serializers import DeviceSerializer, ProductTypeSerializer, PlaceSerializer, ProductSerializer
 from apps.user.permission import UserIsAdmin
 
@@ -9,7 +10,7 @@ from apps.user.permission import UserIsAdmin
 class PlaceViewSet(ModelViewSet):
     permission_classes = (UserIsAdmin,)
     serializer_class = PlaceSerializer
-    queryset = Device.objects.all()
+    queryset = Place.objects.all()
 
 
 # ===================================================== #
@@ -30,3 +31,4 @@ class ProductViewSet(ModelViewSet):
     permission_classes = (UserIsAdmin,)
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
+    filter_backends = (filters.ProductFilterBackend,)
