@@ -7,11 +7,13 @@ from apps.user.models import User
 
 WAITING = 'w'
 ACTIVE = 'a'
+FINISHED = 'f'
 CANCELED = 'c'
 
 ORDER_STATUS_CHOICES = (
     (WAITING, 'waiting'),
     (ACTIVE, 'active'),
+    (FINISHED, 'finished'),
     (CANCELED, 'canceled'),
 )
 

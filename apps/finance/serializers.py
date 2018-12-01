@@ -7,6 +7,7 @@ from apps.core.serializers import MyChoiceField
 from apps.finance.models import TRADE_TYPE_CHOICES, Trade
 from apps.store.models import ACTIVE, WAITING
 from apps.store.serializers import OrderSerializer
+from apps.user.manager import USER_TYPE_CHOICES
 from apps.user.models import User
 from apps.user.serializers import UserProfileSerializer
 
@@ -49,7 +50,7 @@ USER_FIELDS = ('id', 'username', 'first_name', 'last_name', 'address', 'avatar',
 
 
 class ClientSerializer(serializers.ModelSerializer):
-    type = serializers.CharField(source='get_type_display')
+    type = MyChoiceField(choices=USER_TYPE_CHOICES)
 
     class Meta:
         model = User

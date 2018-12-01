@@ -5,7 +5,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
 from apps.core.models import TimeStampedMixin
-from apps.user.manager import UserManager, USER_TYPE_CHOICES
+from apps.user.manager import UserManager, USER_TYPE_CHOICES, ClientManager
 
 
 class User(AbstractBaseUser,
@@ -24,6 +24,7 @@ class User(AbstractBaseUser,
     type = models.CharField(max_length=1, choices=USER_TYPE_CHOICES)
 
     objects = UserManager()
+    clients = ClientManager()
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['first_name', 'last_name']

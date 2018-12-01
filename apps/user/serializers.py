@@ -2,6 +2,8 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
+from apps.core.serializers import MyChoiceField
+from apps.user.manager import USER_TYPE_CHOICES
 from apps.user.models import User
 
 USER_FIELDS = ('id', 'username', 'first_name', 'last_name', 'address', 'avatar', 'type', 'password', 'money')
@@ -9,7 +11,7 @@ USER_READ_ONLY_FIELDS = ('id', 'username', 'type', 'money')
 
 
 class UserProfileSerializer(ModelSerializer):
-    type = serializers.CharField(source='get_type_display')
+    type = MyChoiceField(choices=USER_TYPE_CHOICES)
 
     class Meta:
         model = User

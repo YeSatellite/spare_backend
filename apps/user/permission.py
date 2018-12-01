@@ -13,22 +13,22 @@ class UserIsOwnerOrReadOnly(permissions.BasePermission):
 class UserIsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and\
-               request.user.get_type_display() == ADMIN
+               request.user.type is ADMIN
 
 
 class UserIsStaff(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and\
-               request.user.get_type_display() in (ADMIN, STAFF)
+               request.user.type in (ADMIN, STAFF)
 
 
 class UserIsClient(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and\
-               request.user.get_type_display() in CLIENT
+               request.user.type is CLIENT
 
 
 class UserIsGuest(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and\
-               request.user.get_type_display() in GUEST
+               request.user.type is GUEST

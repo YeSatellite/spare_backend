@@ -21,9 +21,6 @@ class UserProfileAPIView(RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
 
     def get_object(self, queryset=None):
-        print(Group.objects.all())
-        Permission
-        print(self.request.user.groups.all())
         return self.request.user
 
 

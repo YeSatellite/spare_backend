@@ -1,16 +1,16 @@
 # coding=utf-8
 from django.contrib.auth.base_user import BaseUserManager
 
-ADMIN = 'admin'
-STAFF = 'staff'
-CLIENT = 'client'
-GUEST = 'guest'
+ADMIN = 'a'
+STAFF = 's'
+CLIENT = 'c'
+GUEST = 'g'
 
 USER_TYPE_CHOICES = (
-    ('a', ADMIN),
-    ('s', STAFF),
-    ('c', CLIENT),
-    ('g', GUEST),
+    (ADMIN, 'admin'),
+    (STAFF, 'staff'),
+    (CLIENT, 'client'),
+    (GUEST, 'guest'),
 )
 
 
@@ -35,3 +35,9 @@ class UserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(username, first_name, last_name, password, **extra_fields)
+
+
+class ClientManager(UserManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(type=CLIENT)
+

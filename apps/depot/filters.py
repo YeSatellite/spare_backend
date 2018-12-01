@@ -31,7 +31,6 @@ class ProductFilterBackend(filters.BaseFilterBackend):
                 tmp = tmp.intersection(
                     queryset.filter(Q(name__contains=search) | Q(type__name__contains=search))
                 )
-
             queryset = tmp
 
         return queryset
