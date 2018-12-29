@@ -38,3 +38,13 @@ def custom_exception_handler(exc, context):
             response['Error-Code'] = r_error_code
 
     return response
+
+
+def digit3(n, end=' ₸'):
+    n = str(n)
+    t = len(n) // 3
+    r = len(n) - t * 3
+    s = n[0:r]
+    for i in range(t):
+        s = s + ' ' + n[r + 3 * i:r + 3 * (i + 1)]
+    return s + end

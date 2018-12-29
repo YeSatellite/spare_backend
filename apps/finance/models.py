@@ -7,19 +7,19 @@ from apps.depot.models import Product
 from apps.store.models import Order
 from apps.user.models import User
 
-IN = 'i'
-OUT = 'o'
+IN = 'g'
+OUT = 'm'
 
 TRADE_TYPE_CHOICES = (
-    (IN, 'in'),
-    (OUT, 'out'),
+    (IN, 'good'),
+    (OUT, 'money'),
 )
 
 
 class Trade(TimeStampedMixin):
     order = models.OneToOneField(Order, models.CASCADE, null=True)
     registered = models.ForeignKey(User, models.CASCADE)
-    money = models.PositiveIntegerField()
+    money = models.PositiveIntegerField(default=0)
 
     type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOICES)
 

@@ -1,11 +1,11 @@
 # coding=utf-8
-from django.db.models import Sum
+from django.db.models import Sum, F
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from apps.core.serializers import MyChoiceField
 from apps.finance.models import TRADE_TYPE_CHOICES, Trade
-from apps.store.models import ACTIVE, WAITING
+from apps.store.models import ACTIVE, WAITING, FINISHED
 from apps.store.serializers import OrderSerializer
 from apps.user.manager import USER_TYPE_CHOICES
 from apps.user.models import User
@@ -17,8 +17,6 @@ class TradeSerializer(serializers.ModelSerializer):
     order = OrderSerializer(read_only=True)
 
     registered = UserProfileSerializer(read_only=True)
-
-    status = MyChoiceField(choices=TRADE_TYPE_CHOICES)
 
     def validate(self, attrs):
         attrs['registered'] = self.context['request'].user
@@ -32,8 +30,8 @@ class TradeSerializer(serializers.ModelSerializer):
         if items.filter(status=WAITING).count() != 0:
             raise ParseError({'order_id': ['Order has waiting items']})
 
-        money = items.filter(status=ACTIVE).aggregate(money=Sum('total'))['money']
-
+        money = items.filter(status=FINISHED).aggregate(money=Sum(F('amount')*F('price')))['money']
+        money = money if money else 0
         order.status = ACTIVE
         order.save()
 
@@ -42,7 +40,7 @@ class TradeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trade
-        fields = ('id', 'order_id', 'order', 'registered', 'status')
+        fields = ('id', 'order_id', 'order', 'registered', 'type')
         read_only_fields = ('id', 'registered')
 
 

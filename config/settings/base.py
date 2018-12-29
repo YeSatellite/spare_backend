@@ -120,7 +120,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 
     'EXCEPTION_HANDLER': 'apps.core.utils.custom_exception_handler',
-
 }
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1000),

@@ -35,7 +35,7 @@ class Product(TimeStampedMixin):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to='products/', null=True)
     price = models.PositiveIntegerField()
-    status = models.PositiveIntegerField(default=2)
+    amount = models.PositiveIntegerField(default=2)
 
     type = models.ForeignKey(ProductType, models.CASCADE)
     place = models.ForeignKey(Place, models.CASCADE, null=True)

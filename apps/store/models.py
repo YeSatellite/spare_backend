@@ -22,7 +22,6 @@ ORDER_STATUS_CHOICES = (
 
 
 class Order(TimeStampedMixin):
-
     client = models.ForeignKey(User, models.CASCADE, related_name='order_client')
     registered = models.ForeignKey(User, models.CASCADE, related_name='order_registered')
 
@@ -39,11 +38,7 @@ class OrderItem(TimeStampedMixin):
 
     amount = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
-    status = models.CharField(max_length=1, choices=ORDER_STATUS_CHOICES,
-                              default=ORDER_STATUS_CHOICES[0][0])
-
-    def total(self):
-        return self.amount*self.price
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return str("%s: %s" % (self.order, self.product))
