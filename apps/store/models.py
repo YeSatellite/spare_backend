@@ -25,7 +25,7 @@ class Order(TimeStampedMixin):
     client = models.ForeignKey(User, models.CASCADE, related_name='order_client')
     registered = models.ForeignKey(User, models.CASCADE, related_name='order_registered')
 
-    status = models.CharField(max_length=1, choices=ORDER_STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=ORDER_STATUS_CHOICES,default=WAITING)
 
     def __str__(self):
         return str("%s %s" % (self.client, self.created.strftime('%d-%m-%Y')))

@@ -60,7 +60,8 @@ class OrderViewSet(ModelViewSet):
         row_num += 1
         worksheet.merge_range(row_num, 0, row_num, 1, 'Order ID:', title)
         worksheet.merge_range(row_num, 2, row_num, width - 1,
-                              order.id, meta)
+                              str(order.id), meta)
+        row_num += 1
         worksheet.merge_range(row_num, 0, row_num, 1, 'Client:', title)
         worksheet.merge_range(row_num, 2, row_num, width - 1,
                               '%s %s(%s)' % (order.client.first_name, order.client.last_name, order.client.username),

@@ -27,15 +27,14 @@ class TradeSerializer(serializers.ModelSerializer):
         order = obj.order
         client = order.client
         items = order.orderitem_set
-        if items.filter(status=WAITING).count() != 0:
+        if items.filter(status=False).count() != 0:
             raise ParseError({'order_id': ['Order has waiting items']})
 
-        money = items.filter(status=FINISHED).aggregate(money=Sum(F('amount')*F('price')))['money']
-        money = money if money else 0
+        money = items.filter(status=True).aggregate(money=Sum(F('amount')*F('price')))['money']
         order.status = ACTIVE
         order.save()
 
-        client.money -= money
+        client.money -= money if money else 0
         return obj
 
     class Meta:
