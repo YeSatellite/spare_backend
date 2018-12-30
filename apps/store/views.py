@@ -22,7 +22,7 @@ class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
 
     def get_queryset(self):
-        if self.action == 'retrieve':
+        if self.action in ['retrieve', 'items']:
             return self.queryset
         else:
             return self.queryset.filter(status=WAITING)
