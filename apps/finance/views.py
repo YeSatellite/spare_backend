@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from apps.finance.filters import TradeFilterBackend
 from apps.finance.models import Trade
 from apps.finance.pagination import TradePagination
 from apps.finance.serializers import TradeSerializer, ClientSerializer
@@ -16,14 +17,13 @@ class TradeViewSet(ReadOnlyModelViewSet, CreateModelMixin):
     serializer_class = TradeSerializer
     queryset = Trade.objects.all().order_by('-created')
     pagination_class = TradePagination
-    filter_fields = ('order__client',)
+    filter_backends = [TradeFilterBackend, ]
 
     @action(detail=True, methods=['post'])
     def finish(self, request, pk=None):
         order = self.get_object().order
         order.status = FINISHED
         order.save()
-        print('ura')
         return self.retrieve(request)
 
 

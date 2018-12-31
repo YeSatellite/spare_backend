@@ -5,8 +5,8 @@ from rest_framework import serializers
 from rest_framework.exceptions import ParseError
 
 from apps.core.serializers import MyChoiceField
-from apps.finance.models import TRADE_TYPE_CHOICES, Trade
-from apps.store.models import ACTIVE, WAITING, FINISHED
+from apps.finance.models import TRADE_TYPE_CHOICES, Trade, IN
+from apps.store.models import ACTIVE, WAITING, FINISHED, Order
 from apps.store.serializers import OrderSerializer
 from apps.user.manager import USER_TYPE_CHOICES
 from apps.user.models import User
@@ -20,7 +20,9 @@ class TradeSerializer(serializers.ModelSerializer):
     registered = UserProfileSerializer(read_only=True)
 
     def validate(self, attrs):
+        attrs['client'] = Order.objects.get(id=attrs['order_id']).client.id
         attrs['registered'] = self.context['request'].user
+        attrs['type'] = IN
         return attrs
 
     @transaction.atomic
@@ -31,19 +33,24 @@ class TradeSerializer(serializers.ModelSerializer):
         order.status = ACTIVE
         order.save()
 
-        client = order.client
+        client = trade.client
         items = order.orderitem_set
         if items.filter(status=False).count() != 0:
             raise ParseError({'order_id': ['Order has waiting items']})
 
-        money = items.filter(status=True).aggregate(money=Sum(F('amount')*F('price')))['money']
+        money = items.filter(status=True).aggregate(money=Sum(F('amount') * F('price')))['money']
         money = money if money else 0
+
+        old_trade = Trade.objects.filter(client=order.client).order_by('created').last()
+
+        if old_trade != client.money:
+            pass  # TODO
 
         client.money -= money
         client.save()
 
         trade.money = money
-        trade.sum = trade.sum+money
+        trade.sum = old_trade.sum - money
         trade.save()
 
         return trade
@@ -51,7 +58,7 @@ class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
         fields = ('id', 'order_id', 'order', 'registered', 'type', 'money', 'sum', 'created')
-        read_only_fields = ('id', 'registered', 'money', 'sum')
+        read_only_fields = ('id', 'registered', 'money', 'sum', 'type')
 
 
 USER_FIELDS = ('id', 'username', 'first_name', 'last_name', 'address', 'avatar', 'type', 'money')
