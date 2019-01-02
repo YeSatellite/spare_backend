@@ -24,6 +24,8 @@ class OrderSerializer(serializers.ModelSerializer):
     registered = UserProfileSerializer(read_only=True)
     items_info = serializers.SerializerMethodField()
 
+    trade_id = serializers.IntegerField(source='trade.id', read_only=True)
+
     def get_items_info(self, obj):
         items = obj.orderitem_set
 
@@ -47,7 +49,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = id_fields + ('client_id', 'client', 'registered', 'status', 'items_info') + time_stamp_fields
+        fields = id_fields + ('client_id', 'client', 'registered', 'status', 'items_info', 'trade_id') + \
+            time_stamp_fields
         read_only_fields = ('registered', 'status',) + id_fields
 
 

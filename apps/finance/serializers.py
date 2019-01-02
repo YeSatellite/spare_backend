@@ -20,7 +20,7 @@ class TradeSerializer(serializers.ModelSerializer):
     registered = UserProfileSerializer(read_only=True)
 
     def validate(self, attrs):
-        attrs['client'] = Order.objects.get(id=attrs['order_id']).client.id
+        attrs['client'] = Order.objects.get(id=attrs['order_id']).client
         attrs['registered'] = self.context['request'].user
         attrs['type'] = IN
         return attrs

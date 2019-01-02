@@ -20,7 +20,7 @@ class TradeViewSet(ReadOnlyModelViewSet, CreateModelMixin):
     filter_backends = [TradeFilterBackend, ]
 
     @action(detail=True, methods=['post'])
-    def finish(self, request, pk=None):
+    def archive(self, request, pk=None):
         order = self.get_object().order
         order.status = FINISHED
         order.save()
