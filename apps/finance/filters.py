@@ -1,4 +1,5 @@
 # coding=utf-8
+from django.db.models import Q
 from rest_framework import filters
 
 from apps.finance.models import Trade
@@ -17,9 +18,13 @@ class TradeFilterBackend(filters.BaseFilterBackend):
         for k, v in request.query_params.items():
             if v != '':
                 pars[k] = v[0]
-        if 'client' in pars:
-            queryset = queryset.filter(order__client=pars['client'])
-
+        if 'search' in pars:
+            searches = pars['search'].split()
+            for search in searches:
+                queryset = queryset.filter(
+                    Q(order__client__username__startswith=search) |
+                    Q(order__client__first_name__startswith=search) |
+                    Q(order__client__last_name__startswith=search))
         if 'archive' in pars:
             status = 'f' if pars['archive'] in TRUE else 'a'
             queryset = queryset.filter(order__status=status)
