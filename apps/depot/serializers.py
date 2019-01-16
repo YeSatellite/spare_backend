@@ -7,7 +7,7 @@ from apps.depot.models import Place, Device, ProductType, Product
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ('id', 'name', 'definition')
+        fields = ('id', 'name',)
         read_only_fields = ('id',)
 
 

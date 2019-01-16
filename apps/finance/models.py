@@ -7,18 +7,18 @@ from apps.depot.models import Product
 from apps.store.models import Order
 from apps.user.models import User
 
-IN = 'g'
-OUT = 'm'
+GOOD = 'g'
+MONEY = 'm'
 
 TRADE_TYPE_CHOICES = (
-    (IN, 'good'),
-    (OUT, 'money'),
+    (GOOD, 'good'),
+    (MONEY, 'money'),
 )
 
 
 class Trade(TimeStampedMixin):
     order = models.OneToOneField(Order, models.CASCADE, null=True)
-    client = models.ForeignKey(User, models.CASCADE, related_name='trade_client')
+    client = models.ForeignKey(User, models.CASCADE, related_name='trade_client', null=True)
     registered = models.ForeignKey(User, models.CASCADE, related_name='trade_registered')
 
     type = models.CharField(max_length=1, choices=TRADE_TYPE_CHOICES)

@@ -18,15 +18,27 @@ class TradeFilterBackend(filters.BaseFilterBackend):
         for k, v in request.query_params.items():
             if v != '':
                 pars[k] = v[0]
-        if 'search' in pars:
-            searches = pars['search'].split()
+
+        param = pars.get('client', None)
+        if param:
+            queryset = queryset.filter(client=param)
+
+        param = pars.get('search', None)
+        if param:
+            searches = param.split()
             for search in searches:
                 queryset = queryset.filter(
                     Q(order__client__username__startswith=search) |
                     Q(order__client__first_name__startswith=search) |
                     Q(order__client__last_name__startswith=search))
-        if 'archive' in pars:
-            status = 'f' if pars['archive'] in TRUE else 'a'
+
+        param = pars.get('archive', None)
+        if param:
+            status = 'f' if param in TRUE else 'a'
             queryset = queryset.filter(order__status=status)
+
+        param = pars.get('type', None)
+        if param:
+            queryset = queryset.filter(type=param)
 
         return queryset
